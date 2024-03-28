@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Generator</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  p{margin-left: 10px;}
+
+  h1 {
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  label {
+    display: block;
+    margin-top: 20px;
+    margin-left: 10px;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: 90%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right:10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    
+  }
+
+  button:hover {
+    background-color: #45a;
+  }
+
+  #passwordOutput {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<h1>ID-USER Generator "Flashka"</h1>
+<p>генерация и восстановление user-id по email .</p>
+<label for="inputWord">Введите ключ: слово или число:</label>
+<input type="text" id="inputWord">
+<label for="passwordLength">Длина user-id:</label>
+<input type="number" id="passwordLength" value="8" min="1">
+<button onclick="generatePassword()">Сгенерировать user-id</button>
+<p id="passwordOutput"></p>
+
+<script>
+function generatePassword() {
+  var inputWord = document.getElementById("inputWord").value;
+  var passwordLength = document.getElementById("passwordLength").value;
+  var password = "";
+  var validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  
+  for (var i = 0; i < passwordLength; i++) {
+    var charIndex = i % inputWord.length;
+    var charCode = inputWord.charCodeAt(charIndex);
+    for (var j = 0; j <= i; j++) {
+      charCode = charCode << 1; // битовый сдвиг на один бит влево
+    }
+    var newIndex = charCode % validChars.length;
+    password += validChars.charAt(newIndex);
+  }
+  
+  document.getElementById("passwordOutput").textContent = password;
+}
+
+function copyPassword() {
+  var passwordText = document.getElementById("passwordOutput");
+  var range = document.createRange();
+  range.selectNode(passwordText);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  document.execCommand("copy");
+  window.getSelection().removeAllRanges();
+  
+  // Опционально: Показать сообщение об успешном копировании
+  alert("Пароль скопирован!");
+}
+</script>
+
+<button onclick="copyPassword()">Скопировать пароль</button>
+</body>
+</html>
